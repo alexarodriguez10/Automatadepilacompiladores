@@ -7,7 +7,7 @@ from tkinter import messagebox as mb
 import pyttsx3
 
 
-# import speech_recognition as sr
+#import speech_recognition as sr
 class Window():
     def __init__(self):
         self.__root = Tk()
@@ -19,8 +19,8 @@ class Window():
     def config(self):
         self.__root.title('ADPND')
         self.__root.resizable(0, 0)
-        self.__root.geometry('800x400')
-        self.__root.config(bg='#64ccda')
+        self.__root.geometry('660x400')
+        self.__root.config(bg='#1ed455')
         self.__root.iconbitmap('img\line-chart.ico')
 
         # Expresion regular
@@ -32,8 +32,8 @@ class Window():
         self.__engine.setProperty('voice', self.__voices[0].id)
 
         # Escuchar
-        """self.__isListening = False
-        self.__r = sr.Recognizer()"""
+        self.__isListening = False
+        #self.__r = sr.Recognizer()
 
     def initwidgets(self):
         # Entry donde va la palabra
@@ -48,35 +48,35 @@ class Window():
         self.label.place(x=120, y=10)
 
         # Botón lento
-        self.slow = Button(self.__root, text='Lento', command=lambda: self.start(3))
-        self.slow.place(x=10, y=220)
+        self.slow = Button(self.__root, bg='#7cbbc4', text='Lento', command=lambda: self.start(3))
+        self.slow.place(x=300, y=280)
 
         # Botón rápido
-        self.fast = Button(self.__root, text='Rápido', command=lambda: self.start(0.5))
-        self.fast.place(x=60, y=220)
+        self.fast = Button(self.__root, bg='#7cbbc4', text='Rápido', command=lambda: self.start(0.5))
+        self.fast.place(x=350, y=280)
 
         # Imagen de la pila
         image = Image.open("img\pile#.png")
         photo = ImageTk.PhotoImage(image)
         self.labelpile = Label(self.__root, image=photo)
         self.labelpile.image = photo
-        self.labelpile.place(x=690, y=230)
+        self.labelpile.place(x=20, y=330)
 
         # Botón reiniciar
-        self.reiniciar = Button(self.__root, text='Reiniciar', command=self.clearall)
-        self.reiniciar.place(x=285, y=280)
+        self.reiniciar = Button(self.__root, bg='#7cbbc4', text='Reiniciar', command=self.clearall)
+        self.reiniciar.place(x=420, y=280)
 
         # Botón escuchar
 
-    # self.listen = Button(self.__root, text='Escuchar',command=self.listening)
-    # self.listen.place(x=226, y=500)
+        self.listen = Button(self.__root, text='Escuchar',command=self.listening)
+        self.listen.place(x=226, y=500)
 
     # Botón de ayuda
     # self.help = Button(self.__root, text='Ayuda', command=self.showhelp)
     # self.help.place(x=10,y=10)
 
     # Comienza el programa
-    def start(self, deelay):
+    def start(self, deelay, mensaje2=None, mensaje3=None, mensaje1=None):
         if (re.findall(self.__patron, self.__word.get())):
             self.automaton = Automaton(str(self.__word.get()))
             self.configautomaton()
@@ -84,9 +84,9 @@ class Window():
             self.__word.set('')
 
             # Inicializa la lista de imagenes de la pila
-            self.piley = 230
+            self.piley = 330
             self.pileelements = []
-            self.pilex = 50
+            self.pilex = 20
             # Inicializa la lista de transiciones usadas, para posteriormente darles formato de nombre de imagen
             self.graphicstransitions = self.automaton.getusedtransitions()
             self.formatgraphicstransitions()
@@ -112,14 +112,26 @@ class Window():
             if (self.automaton.getresult()):
                 self.__engine.say('¡Correcto, es un palíndromo!')
                 self.__engine.runAndWait()
+                #font = ("arial Bold", 19)
+                #mensaje1 = Label(self.__root, text="Es un palindromo")
+                #mensaje1.pack()
+                #mensaje1.place(x=230, y=320)
+
             # mb.showinfo("¡Correcto!","Es un palíndromo")
             else:
                 self.__engine.say('¡Error, No es un palíndromo!')
                 self.__engine.runAndWait()
+
+                #mensaje2 = Label(self.__root, text="No es palindromo")
+                #mensaje2.pack()
+                #mensaje2.place(x=230, y=320)
             #  mb.showerror("¡Error!","No es un palíndromo")
         else:
             self.__engine.say('¡Error! Expresión inválida')
             self.__engine.runAndWait()
+            #mensaje3 = Label(self.__root, text="Expresion invalida")
+            #mensaje3.pack()
+            #mensaje3.place(x=230, y=320)
         #  mb.showerror("¡Error!", "Expresión inválida")
 
     # Configuración del automata
@@ -163,7 +175,7 @@ class Window():
         self.pileelements.append(Label(self.__root, image=photo))
         self.pileelements[len(self.pileelements) - 1].image = photo
         self.piley -= 25
-        self.pileelements[len(self.pileelements) - 1].place(x=690, y=self.piley)
+        self.pileelements[len(self.pileelements) - 1].place(x=20, y=self.piley)
 
     def removepile(self):
         self.pileelements.pop().destroy()
@@ -182,7 +194,7 @@ class Window():
 
     def listening(self):
         pass
-        """self.switch()
+        """   self.switch()
         if (self.__isListening):
             with sr.Microphone() as source:
                 mb.showinfo("Escuchando..","Hable cerca al micrófono")
@@ -216,7 +228,7 @@ class Window():
         self.pileelements.append(Label(self.__root, image=photo))
         self.pileelements[len(self.pileelements) - 1].image = photo
         self.pilex += 50
-        self.pileelements[len(self.pileelements) - 1].place(x=self.pilex, y=100)
+        self.pileelements[len(self.pileelements) - 1].place(x=self.pilex, y=330)
 
 
 programa = Window()
